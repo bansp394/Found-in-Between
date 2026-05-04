@@ -1,6 +1,9 @@
 let lastPostedItem = null;
-const MY_NAME     = 'You';
-const MY_HANDLE   = 'you@newschool.edu';
+const MY_NAME   = 'You';
+const MY_HANDLE = 'you@newschool.edu';
+
+const SVG_USER = `<svg width="13" height="13" viewBox="0 0 24 24" fill="#888"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>`;
+const SVG_IMG  = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#666"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>`;
 
 const BUILDINGS = {
   'Kaplan Hall': {
@@ -46,7 +49,7 @@ const BUILDINGS = {
   'Union Square Residence': {
     addr: '25 Union Square W',
     items: [
-      { id: 21, type: 'lost',  title: 'Textbook Lost',  loc: 'Union Square Residence – Study Room', time: '6 hours ago', what: '"Thinking with Type" by Ellen Lupton. Has sticky notes inside.', where: 'Study room on 4th floor.', when: 'Today afternoon', email: 'anon@newschool.edu' },
+      { id: 21, type: 'lost',  title: 'Textbook Lost', loc: 'Union Square Residence – Study Room', time: '6 hours ago', what: '"Thinking with Type" by Ellen Lupton. Has sticky notes inside.', where: 'Study room on 4th floor.', when: 'Today afternoon', email: 'anon@newschool.edu' },
       { id: 22, type: 'found', title: 'Charger Found',  loc: 'Union Square Residence – Lobby',      time: '2 days ago',  what: 'USB-C phone charger cable, braided black.', where: 'Lobby charging station.', when: 'Saturday', email: 'anon@newschool.edu' },
     ]
   },
@@ -127,8 +130,6 @@ let currentBuilding = 'Kaplan Hall';
 let currentItem     = null;
 let allItems        = [];
 
-const SVG_USER = `<svg width="13" height="13" viewBox="0 0 24 24" fill="#888" stroke="none"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>`;
-const SVG_IMG  = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#666" stroke="none"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>`;
 function goScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -139,8 +140,7 @@ function goScreen(id) {
   document.querySelector('.nav-link')?.classList.add('active');
   const navBuilding = document.getElementById('nav-building');
   if (navBuilding) navBuilding.style.display = (id === 'building' || id === 'item-detail') ? 'inline' : 'none';
-    document.querySelector('.navbar').style.display = id === 'home' ? 'none' : 'flex';
-
+  document.querySelector('.navbar').classList.toggle('hidden', id === 'home');
 }
 
 function toggleCat(id, el) {
@@ -203,7 +203,10 @@ function globalSearch(q) {
   resultsList.innerHTML = matches.length
     ? matches.map(item => `
         <div class="global-result-item" onclick="goItem(${item.id})">
-          <div><div class="global-result-title">${item.title}</div><div class="global-result-loc">${item.loc}</div></div>
+          <div>
+            <div class="global-result-title">${item.title}</div>
+            <div class="global-result-loc">${item.loc}</div>
+          </div>
           <span style="color:var(--gray)">›</span>
         </div>`).join('')
     : '<div style="padding:14px 18px;color:var(--gray);font-size:13px">No results found.</div>';
